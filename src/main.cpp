@@ -2,7 +2,6 @@
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
-#define SPEAKER 27
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
@@ -38,6 +37,8 @@ class MyCharacteristicCallback : public BLECharacteristicCallbacks
     startTime = millis();
     std::string value = pCharacteristic->getValue();
     bleCommand = value.c_str();
+    Serial.println("Got Command");
+    Serial.print(bleCommand.c_str());
   }
 };
 // put function declarations here:
@@ -49,7 +50,7 @@ void setup()
   // define buzzer pinout
   pinMode(GPIO_NUM_16, OUTPUT);
   // initiate a sound
-  tone(GPIO_NUM_16, 131);
+  tone(GPIO_NUM_16, 1000);
 
   // define your ble name at here
   BLEDevice::init("Keychain Yusuf");
@@ -82,7 +83,7 @@ void loop()
       Serial.println(millis() - startTime);
       if (!soundPlaying)
       {
-        tone(GPIO_NUM_16, 131);
+        tone(GPIO_NUM_16, 1000);
         soundPlaying = true;
       }
       // if the command is active more than 10 sec, auto turn off
