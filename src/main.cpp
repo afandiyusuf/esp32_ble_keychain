@@ -84,7 +84,7 @@ void loop()
         tone(GPIO_NUM_16, 1000);
         soundPlaying = true;
       }
-      // if the command is active more than 10 sec, auto turn off
+      // if the command is active more than 5 sec, auto turn off
       if (millis() - startTime > 5000)
       {
         bleCommand = "off";
