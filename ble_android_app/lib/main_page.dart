@@ -38,6 +38,10 @@ class _MainPageState extends State<MainPage> {
         }, onError: (error) {
           log("Error ${error}");
         });
+
+        FlutterBluePlus.adapterState.listen((event) {
+          log("State is ${event}");
+        });
       }
     });
     super.initState();

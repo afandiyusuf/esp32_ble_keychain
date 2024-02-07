@@ -37,8 +37,6 @@ class MyCharacteristicCallback : public BLECharacteristicCallbacks
     startTime = millis();
     std::string value = pCharacteristic->getValue();
     bleCommand = value.c_str();
-    Serial.println("Got Command");
-    Serial.print(bleCommand.c_str());
   }
 };
 // put function declarations here:
