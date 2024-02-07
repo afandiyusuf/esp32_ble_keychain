@@ -15,11 +15,7 @@ Device Requirement
 - Speaker (to trigger the keychain)
 - Android device
 
-
-TODO
+Scheme Image
 ===
-[x] Write documentation.
+<img src="./image/BLE KEYCHAIN.jpg" width="500"/>
 
-[x] Provide a microcontroller scheme.
-
-[x] Write a tutorial.
