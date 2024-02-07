@@ -48,7 +48,6 @@ void setup()
   // define buzzer pinout
   pinMode(GPIO_NUM_16, OUTPUT);
   // initiate a sound
-  tone(GPIO_NUM_16, 1000);
 
   // define your ble name at here
   BLEDevice::init("Keychain Yusuf");
@@ -88,13 +87,20 @@ void loop()
       if (millis() - startTime > 5000)
       {
         bleCommand = "off";
-        soundPlaying = false;
-        noTone(GPIO_NUM_16);
+        if (soundPlaying)
+        {
+          noTone(GPIO_NUM_16);
+          soundPlaying = false;
+        }
       }
     }
     else
     {
-      noTone(GPIO_NUM_16);
+      if (soundPlaying)
+      {
+        noTone(GPIO_NUM_16);
+        soundPlaying = false;
+      }
     }
   }
 }
