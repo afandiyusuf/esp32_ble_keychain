@@ -18,14 +18,14 @@ std::string bleCommand = ""; // command from onWrite is stored at this variable
 // to get elapsed time from sound is played.
 unsigned long startTime = millis();
 unsigned long elapsedTime = millis();
+// put function declarations here:
+void startAdvertisingTask();
 
 class MyServerCallback : public BLEServerCallbacks
-
 {
   void onDisconnect(BLEServer *pServer)
   {
-    // flag that ble is stop advertise its bluetooth, so we can advertise it again.
-    advertising = false;
+    startAdvertisingTask();
   }
 };
 
@@ -37,16 +37,27 @@ class MyCharacteristicCallback : public BLECharacteristicCallbacks
     startTime = millis();
     std::string value = pCharacteristic->getValue();
     bleCommand = value.c_str();
+    if (bleCommand == "on")
+    {
+      tone(16, 300);
+      digitalWrite(BUILTIN_LED, HIGH);
+    }
+    else
+    {
+      noTone(16);
+      digitalWrite(BUILTIN_LED, LOW);
+    }
   }
 };
-// put function declarations here:
-void startAdvertisingTask();
 
 void setup()
 {
-  Serial.begin(115200);
+  // lowering the cpu freq
+  setCpuFrequencyMhz(80);
+
   // define buzzer pinout
-  pinMode(GPIO_NUM_16, OUTPUT);
+  pinMode(BUILTIN_LED, OUTPUT);
+  pinMode(16, OUTPUT);
   // initiate a sound
 
   // define your ble name at here
@@ -64,47 +75,6 @@ void setup()
   startAdvertisingTask();
 }
 
-void loop()
-{
-
-  if (!advertising)
-  {
-    advertising = true;
-    BLEDevice::startAdvertising();
-  }
-  else
-  {
-    if (bleCommand == "on")
-    {
-      Serial.println("Timer after last command");
-      Serial.println(millis() - startTime);
-      if (!soundPlaying)
-      {
-        tone(GPIO_NUM_16, 1000);
-        soundPlaying = true;
-      }
-      // if the command is active more than 5 sec, auto turn off
-      if (millis() - startTime > 5000)
-      {
-        bleCommand = "off";
-        if (soundPlaying)
-        {
-          noTone(GPIO_NUM_16);
-          soundPlaying = false;
-        }
-      }
-    }
-    else
-    {
-      if (soundPlaying)
-      {
-        noTone(GPIO_NUM_16);
-        soundPlaying = false;
-      }
-    }
-  }
-}
-
 void startAdvertisingTask()
 {
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -112,6 +82,10 @@ void startAdvertisingTask()
   pAdvertising->setScanResponse(true);
   pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
+
   BLEDevice::startAdvertising();
   advertising = true;
+}
+void loop()
+{
 }

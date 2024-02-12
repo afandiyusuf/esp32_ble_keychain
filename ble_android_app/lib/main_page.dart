@@ -107,14 +107,29 @@ class _MainPageState extends State<MainPage> {
             ),
             (bleCharacteristic == null)
                 ? Container()
-                : MaterialButton(
-                    onPressed: () {
-                      String commandString = "on";
-                      List<int> byteArrayCommand = utf8.encode(commandString);
-                      bleCharacteristic!.write(byteArrayCommand);
-                    },
-                    child: Text("PING"),
-                    color: Colors.red,
+                : Column(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          String commandString = "on";
+                          List<int> byteArrayCommand =
+                              utf8.encode(commandString);
+                          bleCharacteristic!.write(byteArrayCommand);
+                        },
+                        child: Text("PING"),
+                        color: Colors.red,
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          String commandString = "off";
+                          List<int> byteArrayCommand =
+                              utf8.encode(commandString);
+                          bleCharacteristic!.write(byteArrayCommand);
+                        },
+                        child: Text("STOP"),
+                        color: Colors.red,
+                      ),
+                    ],
                   )
           ],
         ),
